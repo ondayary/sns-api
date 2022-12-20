@@ -1,0 +1,15 @@
+stages: # 단계
+  - dockerbuild-push
+
+package: # 이름을 아무렇게 정해도 된다.
+  image: docker:latest # 무슨 이미지 만들 것인가
+  stage: dockerbuild-push
+  services:
+    - docker:dind # 도커안에서 도커를 돌린다.
+  before_script: # 스크립트 실행 전 명령어
+    - docker login registry.gitlab.com -u $GITLAB_USER -p $GITLAB_PASSWORD
+  script: # 제일 중요
+    - docker build -t registry.gitlab.com/$GITLAB_USER/$PROJECT_NAME .
+    - docker push registry.gitlab.com/$GITLAB_USER/$PROJECT_NAME
+  after_script: # 스크립트 실행 후 명령어
+    - docker logout
