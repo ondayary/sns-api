@@ -1,1 +1,12 @@
-
+server:
+  servlet:
+    encoding:
+      force-response: true
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
