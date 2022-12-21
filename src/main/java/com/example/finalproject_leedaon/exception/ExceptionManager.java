@@ -10,13 +10,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ExceptionManager {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> runtimeExceptionHandler(RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Response.error(e.getMessage()));
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(e.getMessage());
     }
 
     @ExceptionHandler(AppException.class)
-    public ResponseEntity<?> hospitalReviewAppExceptionHandler(AppException e) {
+    public ResponseEntity<?> appExceptionHandler(AppException e){
+        ErrorResponse errorResponse = new ErrorResponse(e.getErrorCode(), e.getMessage());
         return ResponseEntity.status(e.getErrorCode().getStatus())
-                .body(Response.error((e.getErrorCode().name() + " " + e.getMessage())));
+                .body(Response.error("ERROR", errorResponse));
     }
+
 }
