@@ -7,6 +7,6 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-  mvc:
+  mvc: # swagger 오류로 인해 추가
     pathmatch:
       matching-strategy: ant_path_matcher
