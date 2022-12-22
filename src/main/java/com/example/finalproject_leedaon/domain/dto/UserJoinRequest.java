@@ -18,7 +18,7 @@ public class UserJoinRequest {
 
 
     // Dto 오브젝트를 Entity 타입으로 변환해주는 메소드
-    public User toEntity() {
+    public User toEntity(String password) {
         return User.builder()
                 .userName(this.userName)
                 .password(password)

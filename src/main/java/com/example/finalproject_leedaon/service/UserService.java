@@ -6,7 +6,9 @@ import com.example.finalproject_leedaon.domain.dto.UserJoinRequest;
 import com.example.finalproject_leedaon.exception.AppException;
 import com.example.finalproject_leedaon.exception.ErrorCode;
 import com.example.finalproject_leedaon.repository.UserRepository;
+import com.example.finalproject_leedaon.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder encoder;
 
     public UserDto join(UserJoinRequest userJoinRequest) {
 
@@ -27,10 +30,26 @@ public class UserService {
                 });
 
         // 정보가 중복되지 않으면 회원가입
-        User savedUser = userRepository.save(userJoinRequest.toEntity());
+        User savedUser = userRepository.save(userJoinRequest.toEntity(encoder.encode(userJoinRequest.getPassword())));
         return UserDto.builder()
                 .id(savedUser.getId())
                 .userName(savedUser.getUserName())
                 .build();
+    }
+
+    public String login(String userName, String password) {
+
+        // userName 없는 경우
+        // 없으면 USERNAME_NOT_FOUND 발생
+        User user = userRepository.findByUserName(userName)
+                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND,
+                        String.format("%s는 가입한 적이 없습니다.", userName)));
+
+        // password 틀린 경우
+        if(!encoder.matches(user.getPassword(), password)){
+            throw new AppException(ErrorCode.INVALID_PASSWORD,
+                    String.format("틀린 패스워드입니다."));
+        }
+        return "token 리턴";
     }
 }

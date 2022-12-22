@@ -121,11 +121,9 @@ class UserControllerTest {
         String userName = "daon";
         String password = "1q2w3e4r";
 
-        // id, pw를 보내서
         when(userService.login(any(), any()))
                 .thenThrow(new AppException(ErrorCode.INVALID_PASSWORD, ""));
 
-        // USERNAME_NOT_FOUND를 받으면 성공
         mockMvc.perform(post("/api/v1/users/login")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
