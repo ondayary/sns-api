@@ -18,15 +18,15 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/join")
-    public ResponseEntity<String> join(@RequestBody UserJoinRequest userJoinRequest) {
-        userService.join(userJoinRequest);
-        return ResponseEntity.ok().body("회원가입 성공");
+    public Response<UserJoinResponse> join(@RequestBody UserJoinRequest userJoinRequest) {
+        UserJoinResponse responseDto = userService.join(userJoinRequest);
+        return Response.success(responseDto);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserLoginRequest userLoginRequest) {
-        String token = userService.login(userLoginRequest.getUserName(), userLoginRequest.getPassword());
-        return ResponseEntity.ok().body(token);
+    public Response<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest) {
+        UserLoginResponse responseDto = userService.login(userLoginRequest);
+        return Response.success(responseDto);
     }
 }
 

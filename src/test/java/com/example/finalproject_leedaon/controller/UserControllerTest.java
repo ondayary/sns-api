@@ -1,8 +1,6 @@
 package com.example.finalproject_leedaon.controller;
 
-import com.example.finalproject_leedaon.domain.dto.UserDto;
-import com.example.finalproject_leedaon.domain.dto.UserJoinRequest;
-import com.example.finalproject_leedaon.domain.dto.UserLoginRequest;
+import com.example.finalproject_leedaon.domain.dto.*;
 import com.example.finalproject_leedaon.exception.AppException;
 import com.example.finalproject_leedaon.exception.ErrorCode;
 import com.example.finalproject_leedaon.service.UserService;
@@ -17,11 +15,11 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest
@@ -45,7 +43,8 @@ class UserControllerTest {
                 .password("1q2w3e4r")
                 .build();
 
-        when(userService.join(any())).thenReturn(mock(UserDto.class));
+        when(userService.join(any()))
+                .thenReturn(new UserJoinResponse());
 
         // Controller만 테스트
         mockMvc.perform(post("/api/v1/users/join")
@@ -85,15 +84,17 @@ class UserControllerTest {
         String password = "1q2w3e4r";
 
         // controller 에서 service를 호출하는 것이기 때문에 넣어줘야 한다.
-        when(userService.login(any(), any()))
-                .thenReturn("token");
+        when(userService.login(any()))
+                .thenReturn(new UserLoginResponse("token"));
 
         mockMvc.perform(post("/api/v1/users/login")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password))))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                /*.andExpect(jsonPath("$.resultCode").exists())
+                .andExpect(jsonPath("$.result.jwt").exists())*/;
     }
 
     @Test
@@ -103,7 +104,7 @@ class UserControllerTest {
         String userName = "daon";
         String password = "1q2w3e4r";
 
-        when(userService.login(any(), any()))
+        when(userService.login(any()))
                 .thenThrow(new AppException(ErrorCode.USERNAME_NOT_FOUND, ""));
 
         mockMvc.perform(post("/api/v1/users/login")
@@ -121,7 +122,7 @@ class UserControllerTest {
         String userName = "daon";
         String password = "1q2w3e4r";
 
-        when(userService.login(any(), any()))
+        when(userService.login(any()))
                 .thenThrow(new AppException(ErrorCode.INVALID_PASSWORD, ""));
 
         mockMvc.perform(post("/api/v1/users/login")
@@ -131,6 +132,4 @@ class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
-
-
 }
