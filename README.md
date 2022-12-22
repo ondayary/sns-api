@@ -148,4 +148,4 @@ DELETE `/posts/{id}`
 
 
 # ERD
-![](img/ERD.png)
+![](img/erd.png)
