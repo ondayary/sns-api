@@ -34,6 +34,8 @@ dependencies {
 	// security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.security:spring-security-test'
+	// jwt
+	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: "0.9.1"
 }
 
 tasks.named('test') {

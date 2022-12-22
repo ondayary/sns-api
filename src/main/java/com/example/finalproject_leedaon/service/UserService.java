@@ -1,8 +1,7 @@
 package com.example.finalproject_leedaon.service;
 
-import com.example.finalproject_leedaon.domain.dto.UserDto;
+import com.example.finalproject_leedaon.domain.dto.*;
 import com.example.finalproject_leedaon.domain.entity.User;
-import com.example.finalproject_leedaon.domain.dto.UserJoinRequest;
 import com.example.finalproject_leedaon.exception.AppException;
 import com.example.finalproject_leedaon.exception.ErrorCode;
 import com.example.finalproject_leedaon.repository.UserRepository;
@@ -19,7 +18,11 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
 
-    public UserDto join(UserJoinRequest userJoinRequest) {
+    @Value("${jwt.token.secret}")
+    private String secretKey;
+    private long expiredTimeMs = 1000 * 60 * 60l; // 1시간 유지
+
+    public UserJoinResponse join(UserJoinRequest userJoinRequest) {
 
         // 회원 userName(id)이 중복된 경우 중복 check해서 예외 발생
         userRepository.findByUserName(userJoinRequest.getUserName())
@@ -31,25 +34,28 @@ public class UserService {
 
         // 정보가 중복되지 않으면 회원가입
         User savedUser = userRepository.save(userJoinRequest.toEntity(encoder.encode(userJoinRequest.getPassword())));
-        return UserDto.builder()
-                .id(savedUser.getId())
+        return UserJoinResponse.builder()
+                .userId(savedUser.getId())
                 .userName(savedUser.getUserName())
                 .build();
     }
 
-    public String login(String userName, String password) {
+    public UserLoginResponse login(UserLoginRequest userLoginRequest) {
 
         // userName 없는 경우
         // 없으면 USERNAME_NOT_FOUND 발생
-        User user = userRepository.findByUserName(userName)
+        User user = userRepository.findByUserName(userLoginRequest.getUserName())
                 .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND,
-                        String.format("%s는 가입한 적이 없습니다.", userName)));
+                        String.format("%s는 가입한 적이 없습니다.", userLoginRequest.getUserName())));
 
         // password 틀린 경우
-        if(!encoder.matches(user.getPassword(), password)){
+        if(!encoder.matches(userLoginRequest.getPassword(), user.getPassword())){
             throw new AppException(ErrorCode.INVALID_PASSWORD,
                     String.format("틀린 패스워드입니다."));
         }
-        return "token 리턴";
+        // 두가지 확인을 무사히 진행했을 경우(Exception가 아니면) Token발행
+        String token = JwtUtil.createToken(userLoginRequest.getUserName(), secretKey, expiredTimeMs);
+        return new UserLoginResponse(token);
+
     }
 }

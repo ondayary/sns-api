@@ -7,6 +7,11 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
   mvc: # swagger 오류로 인해 추가
     pathmatch:
       matching-strategy: ant_path_matcher
+jwt:
+  token:
+    secret: secretKey
