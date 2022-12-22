@@ -2,6 +2,7 @@ package com.example.finalproject_leedaon.controller;
 
 import com.example.finalproject_leedaon.domain.dto.UserDto;
 import com.example.finalproject_leedaon.domain.dto.UserJoinRequest;
+import com.example.finalproject_leedaon.domain.dto.UserLoginRequest;
 import com.example.finalproject_leedaon.exception.AppException;
 import com.example.finalproject_leedaon.exception.ErrorCode;
 import com.example.finalproject_leedaon.service.UserService;
@@ -75,4 +76,63 @@ class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isConflict());
     }
+
+    @Test
+    @DisplayName("로그인 성공")
+    @WithMockUser
+    void login_success() throws Exception {
+        String userName = "daon";
+        String password = "1q2w3e4r";
+
+        // controller 에서 service를 호출하는 것이기 때문에 넣어줘야 한다.
+        when(userService.login(any(), any()))
+                .thenReturn("token");
+
+        mockMvc.perform(post("/api/v1/users/login")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password))))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("로그인 실패 - userName 없음")
+    @WithMockUser
+    void login_fail1() throws Exception {
+        String userName = "daon";
+        String password = "1q2w3e4r";
+
+        when(userService.login(any(), any()))
+                .thenThrow(new AppException(ErrorCode.USERNAME_NOT_FOUND, ""));
+
+        mockMvc.perform(post("/api/v1/users/login")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password))))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("로그인 실패 - password 틀림")
+    @WithMockUser
+    void login_fail2() throws Exception {
+        String userName = "daon";
+        String password = "1q2w3e4r";
+
+        // id, pw를 보내서
+        when(userService.login(any(), any()))
+                .thenThrow(new AppException(ErrorCode.INVALID_PASSWORD, ""));
+
+        // USERNAME_NOT_FOUND를 받으면 성공
+        mockMvc.perform(post("/api/v1/users/login")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password))))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+    }
+
+
 }
