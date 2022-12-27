@@ -21,11 +21,11 @@ http://ec2-54-180-145-236.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui/
 ![](img/erd.png)
 
 ## * 요구사항
-> 인증 / 인가 필터 구현 <br>
-> 상품 조회 / 수정 API 구현 <br> 
-> 상품 수정 테스트 코드 작성 <br>
-> Swagger를 이용하여 상품 수정 API 문서 자동화 <br>
-> develop 브랜치에 push 할 경우 AWS EC2 서버에 자동으로 배포 되도록 구현
+- 인증 / 인가 필터 구현 <br>
+- 상품 조회 / 수정 API 구현 <br> 
+- 상품 수정 테스트 코드 작성 <br>
+- Swagger를 이용하여 상품 수정 API 문서 자동화 <br>
+- develop 브랜치에 push 할 경우 AWS EC2 서버에 자동으로 배포 되도록 구현
 
 ### * 회원가입
 POST `/api​/v1​/users​/join`
@@ -83,7 +83,7 @@ http://localhost:8080/api/v1/posts
 ```
 
 ### * 포스트 상세
-GET `/api/v1/posts/{postsId}`
+GET `/api/v1/posts/{postsId}` <br>
 http://localhost:8080/api/v1/posts/1
 - 리턴 (JSON 형식)
 ```json
