@@ -1,21 +1,34 @@
 # 프로젝트 소개
 > 종합 프로젝트를 통해서 만들어볼 서비스는 “멋사스네스(MutsaSNS)”입니다. 
 
-# EndPoint
-> 기본 URL
-```shell
-/api/v1
-```
+## * Swagger
+http://ec2-54-180-145-236.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui/
+
+## * EndPoint
+### userController
+회원가입 `POST ​/api​/v1​/users​/join` <br>
+로그인 `POST ​/api​/v1​/users​/login`
+
+### postController
+포스트 리스트 `GET ​/api​/v1​/posts` <br>
+포스트 상세 `GET ​/api​/v1​/posts​/{postsId}` <br>
+포스트 작성 `POST ​/api​/v1​/posts` <br>
+포스트 수정 `PUT ​/api​/v1​/posts​/{id}` <br>
+포스트 삭제 `DELETE ​/api​/v1​/posts​/{postId}`
 <br>
 
-## 회원 인증/인가
-> 회원 URL
-```shell
-/users
-```
+## * ERD
+![](img/erd.png)
 
-### 회원가입
-POST `/join`
+## * 요구사항
+> 인증 / 인가 필터 구현 <br>
+> 상품 조회 / 수정 API 구현 <br> 
+> 상품 수정 테스트 코드 작성 <br>
+> Swagger를 이용하여 상품 수정 API 문서 자동화 <br>
+> develop 브랜치에 push 할 경우 AWS EC2 서버에 자동으로 배포 되도록 구현
+
+### * 회원가입
+POST `/api​/v1​/users​/join`
 - 입력 폼(JSON 형식)
 ```json
 {
@@ -34,8 +47,8 @@ POST `/join`
 }
 ```
 
-### 로그인
-POST `/login`
+### * 로그인
+POST `api​/v1​/users​/login`
 - 입력 폼(JSON 형식)
 ```json
 {
@@ -50,14 +63,9 @@ POST `/login`
 }
 ```
 
-## 포스트
-> 포스트 URL
-```shell
-/posts
-```
-
-### 포스트 리스트
-GET
+### * 포스트 리스트
+GET `​/api​/v1​/posts`<br>
+http://localhost:8080/api/v1/posts
 - 리턴 (JSON 형식)
 ```json
 {"content":
@@ -74,8 +82,9 @@ GET
   "numberOfElements":4,"first":true,"empty":false}
 ```
 
-### 포스트 상세
-GET `/posts/{postsId}`
+### * 포스트 상세
+GET `/api/v1/posts/{postsId}`
+http://localhost:8080/api/v1/posts/1
 - 리턴 (JSON 형식)
 ```json
 {
@@ -88,8 +97,8 @@ GET `/posts/{postsId}`
 }
 ```
 
-### 포스트 등록
-POST `/posts`
+### * 포스트 등록
+POST `/api/v1/posts`
 - 입력 폼(JSON 형식)
 ```json
 {
@@ -107,8 +116,8 @@ POST `/posts`
   }
 }
 ```
-### 포스트 수정
-PUT `/posts/{id}`
+### * 포스트 수정
+PUT `/api/v1/posts/{postId}`
 - 입력 폼(JSON 형식)
 ```json
 {
@@ -127,8 +136,8 @@ PUT `/posts/{id}`
 }
 ```
 
-### 포스트 삭제
-DELETE `/posts/{id}`
+### * 포스트 삭제
+DELETE `/api/v1/posts/{postId}`
 - 입력 폼(JSON 형식)
 ```json
 {
@@ -145,7 +154,3 @@ DELETE `/posts/{id}`
   }
 }
 ```
-
-
-# ERD
-![](img/erd.png)
