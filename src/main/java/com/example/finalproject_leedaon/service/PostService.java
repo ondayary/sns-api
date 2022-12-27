@@ -1,6 +1,7 @@
 package com.example.finalproject_leedaon.service;
 
 import com.example.finalproject_leedaon.domain.dto.PostDto;
+import com.example.finalproject_leedaon.domain.dto.PostReadResponse;
 import com.example.finalproject_leedaon.domain.entity.Post;
 import com.example.finalproject_leedaon.domain.entity.User;
 import com.example.finalproject_leedaon.exception.AppException;
@@ -9,6 +10,8 @@ import com.example.finalproject_leedaon.repository.PostRepository;
 import com.example.finalproject_leedaon.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -43,5 +46,10 @@ public class PostService {
                 .build();
 
         return postDto;
+    }
+
+    // 포스트 리스트
+    public Page<PostReadResponse> postList(Pageable pageable) {
+        return postRepository.findAll(pageable).map(PostReadResponse::toPostReadResponse);
     }
 }
