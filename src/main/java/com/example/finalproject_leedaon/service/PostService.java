@@ -52,4 +52,11 @@ public class PostService {
     public Page<PostReadResponse> postList(Pageable pageable) {
         return postRepository.findAll(pageable).map(PostReadResponse::toPostReadResponse);
     }
+
+    // 포스트 상세
+    public PostReadResponse postDetail(Integer postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND, ErrorCode.POST_NOT_FOUND.getMessage()));
+        return PostReadResponse.toPostReadResponse(post);
+    }
 }

@@ -36,4 +36,10 @@ public class PostController {
         Page<PostReadResponse> postList = postService.postList(pageable);
         return Response.success(postList);
     }
+
+    // 포스트 상세
+    @GetMapping("/{postId}")
+    public Response<PostReadResponse> postDetail(@PathVariable Integer postId) {
+        return Response.success(postService.postDetail(postId));
+    }
 }
