@@ -20,7 +20,7 @@ public class UserService {
 
     @Value("${jwt.token.secret}")
     private String secretKey;
-    private long expiredTimeMs = 1000 * 60 * 60l; // 1시간 유지
+    private long expiredTimeMs = 1000 * 60 * 60; // 1시간 유지
 
     public UserJoinResponse join(UserJoinRequest userJoinRequest) {
 
@@ -35,7 +35,7 @@ public class UserService {
         // 정보가 중복되지 않으면 회원가입
         User savedUser = userRepository.save(userJoinRequest.toEntity(encoder.encode(userJoinRequest.getPassword())));
         return UserJoinResponse.builder()
-                .userId(savedUser.getId())
+                .id(savedUser.getId())
                 .userName(savedUser.getUserName())
                 .build();
     }
@@ -56,6 +56,12 @@ public class UserService {
         // 두가지 확인을 무사히 진행했을 경우(Exception가 아니면) Token발행
         String token = JwtUtil.createToken(userLoginRequest.getUserName(), secretKey, expiredTimeMs);
         return new UserLoginResponse(token);
-
     }
+
+    public User getUserByUserName(String userName) {
+        return userRepository.findByUserName(userName)
+                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND,
+                        ErrorCode.USERNAME_NOT_FOUND.getMessage()));
+    }
+
 }

@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 public class UserJoinResponse {
 
     // 회원가입시 응답해줄 필드 선언
-    private Long userId;
+    private Integer id;
     private String userName;
 
     @Builder
-    public UserJoinResponse(Long userId, String userName) {
-        this.userId = userId;
+    public UserJoinResponse(Integer id, String userName) {
+        this.id = id;
         this.userName = userName;
     }
 }

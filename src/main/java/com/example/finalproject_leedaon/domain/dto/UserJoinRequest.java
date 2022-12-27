@@ -1,6 +1,7 @@
 package com.example.finalproject_leedaon.domain.dto;
 
 import com.example.finalproject_leedaon.domain.entity.User;
+import com.example.finalproject_leedaon.domain.entity.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,6 +23,7 @@ public class UserJoinRequest {
         return User.builder()
                 .userName(this.userName)
                 .password(password)
+                .role(UserRole.USER)
                 .build();
     }
 }
