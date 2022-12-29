@@ -1,14 +1,26 @@
 package com.example.finalproject_leedaon.controller;
 
-import org.springframework.http.ResponseEntity;
+import com.example.finalproject_leedaon.service.AlgorithmService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/hello")
 public class HelloController {
 
-    @GetMapping("/api/v1/hello")
-    public ResponseEntity<String> hello() {
-        return ResponseEntity.ok().body("이다온");
+    private final AlgorithmService algorithmService;
+
+    @GetMapping
+    public String hello() {
+        return "이다온";
+    }
+
+    @GetMapping("/{num}")
+    public Integer divide(@PathVariable Integer num) {
+        return algorithmService.sumOfDigit(num);
     }
 }
