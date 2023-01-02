@@ -1,7 +1,7 @@
 package com.example.finalproject_leedaon.controller;
 
 import com.example.finalproject_leedaon.domain.Response;
-import com.example.finalproject_leedaon.domain.dto.*;
+import com.example.finalproject_leedaon.domain.dto.post.*;
 import com.example.finalproject_leedaon.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,14 +29,14 @@ public class PostController {
 
     // 포스트 리스트
     @GetMapping
-    public Response<Page<PostReadResponse>> postList(@PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<PostReadResponse> postList = postService.postList(pageable);
+    public Response<Page<PostDto.PostReadResponse>> postList(@PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<PostDto.PostReadResponse> postList = postService.postList(pageable);
         return Response.success(postList);
     }
 
     // 포스트 상세
     @GetMapping("/{postId}")
-    public Response<PostReadResponse> postDetail(@PathVariable Integer postId) {
+    public Response<PostDto.PostReadResponse> postDetail(@PathVariable Integer postId) {
         return Response.success(postService.postDetail(postId));
     }
 

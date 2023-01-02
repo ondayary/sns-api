@@ -1,12 +1,14 @@
-package com.example.finalproject_leedaon.domain.dto;
+package com.example.finalproject_leedaon.domain.dto.user;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
+@Builder
 @AllArgsConstructor
 @Getter
-public class UserLoginRequest { // 요청 DTO
+public class UserDto {
+    private Integer id;
     private String userName;
     private String password;
 }

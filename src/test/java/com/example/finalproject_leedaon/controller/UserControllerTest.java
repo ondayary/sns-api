@@ -1,6 +1,9 @@
 package com.example.finalproject_leedaon.controller;
 
-import com.example.finalproject_leedaon.domain.dto.*;
+import com.example.finalproject_leedaon.domain.dto.user.UserJoinRequest;
+import com.example.finalproject_leedaon.domain.dto.user.UserJoinResponse;
+import com.example.finalproject_leedaon.domain.dto.user.UserLoginRequest;
+import com.example.finalproject_leedaon.domain.dto.user.UserLoginResponse;
 import com.example.finalproject_leedaon.exception.AppException;
 import com.example.finalproject_leedaon.exception.ErrorCode;
 import com.example.finalproject_leedaon.service.UserService;

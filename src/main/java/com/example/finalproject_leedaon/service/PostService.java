@@ -1,8 +1,7 @@
 package com.example.finalproject_leedaon.service;
 
-import com.example.finalproject_leedaon.domain.dto.PostDto;
-import com.example.finalproject_leedaon.domain.dto.PostReadResponse;
-import com.example.finalproject_leedaon.domain.dto.PostUpdateRequest;
+import com.example.finalproject_leedaon.domain.dto.post.PostDto;
+import com.example.finalproject_leedaon.domain.dto.post.PostUpdateRequest;
 import com.example.finalproject_leedaon.domain.entity.Post;
 import com.example.finalproject_leedaon.domain.entity.User;
 import com.example.finalproject_leedaon.exception.AppException;
@@ -53,15 +52,15 @@ public class PostService {
     }
 
     // 포스트 리스트
-    public Page<PostReadResponse> postList(Pageable pageable) {
-        return postRepository.findAll(pageable).map(PostReadResponse::toPostReadResponse); // PostReadResponse에 있는 toPostReeadResponse를 바로 가져다 쓰겠다.
+    public Page<PostDto.PostReadResponse> postList(Pageable pageable) {
+        return postRepository.findAll(pageable).map(PostDto.PostReadResponse::toPostReadResponse); // PostReadResponse에 있는 toPostReeadResponse를 바로 가져다 쓰겠다.
     }
 
     // 포스트 상세
-    public PostReadResponse postDetail(Integer postId) {
+    public PostDto.PostReadResponse postDetail(Integer postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new AppException(POST_NOT_FOUND, POST_NOT_FOUND.getMessage()));
-        return PostReadResponse.toPostReadResponse(post);
+        return PostDto.PostReadResponse.toPostReadResponse(post);
     }
 
     // 포스트 수정

@@ -1,6 +1,6 @@
 package com.example.finalproject_leedaon.domain.entity;
 
-import com.example.finalproject_leedaon.domain.dto.PostDto;
+import com.example.finalproject_leedaon.domain.dto.post.PostDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

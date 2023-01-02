@@ -1,4 +1,4 @@
-package com.example.finalproject_leedaon.domain.dto;
+package com.example.finalproject_leedaon.domain.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,10 +1,12 @@
 package com.example.finalproject_leedaon.controller;
 
-import com.example.finalproject_leedaon.domain.dto.*;
 import com.example.finalproject_leedaon.domain.Response;
+import com.example.finalproject_leedaon.domain.dto.user.UserJoinRequest;
+import com.example.finalproject_leedaon.domain.dto.user.UserJoinResponse;
+import com.example.finalproject_leedaon.domain.dto.user.UserLoginRequest;
+import com.example.finalproject_leedaon.domain.dto.user.UserLoginResponse;
 import com.example.finalproject_leedaon.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

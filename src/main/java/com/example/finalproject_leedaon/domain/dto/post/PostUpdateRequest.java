@@ -1,4 +1,4 @@
-package com.example.finalproject_leedaon.domain.dto;
+package com.example.finalproject_leedaon.domain.dto.post;
 
 import com.example.finalproject_leedaon.domain.entity.Post;
 import com.example.finalproject_leedaon.domain.entity.User;
