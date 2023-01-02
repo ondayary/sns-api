@@ -16,7 +16,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
-
 public class SecurityConfig {
 
     private final UserService userService;
@@ -31,9 +30,11 @@ public class SecurityConfig {
                 .csrf().disable() // 크로스 사이트 기능
                 .cors().and() // 도메인이 다를 때 허용하겠다.
                 .authorizeRequests()
-//                .antMatchers("/api/**").permitAll()
-                .antMatchers("/api/v1/users/join", "/api/v1/users/login").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/v1/**").authenticated()
+                .antMatchers("/swagger-ui/").permitAll()
+                .antMatchers("/api/v1/users/join", "/api/v1/users/login").permitAll() // join, login은 언제나 가능
+                .antMatchers(HttpMethod.POST, "/api/v1/posts").authenticated()
+                .antMatchers(HttpMethod.PUT, "/api/v1/posts").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/api/v1/posts").authenticated()
                 .and()
                 .sessionManagement() // 인증, 인가 관리
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt사용하는 경우 씀, 상태없음 정책

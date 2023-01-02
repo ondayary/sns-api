@@ -29,4 +29,10 @@ public class Post extends PostBase {
     public PostDto toPostDto() {
         return new PostDto(this.id, this.title, this.body);
     }
+
+    // 포스트 수정
+    public void update(Post post) {
+        this.title = post.getTitle();
+        this.body = post.getBody();
+    }
 }

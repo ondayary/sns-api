@@ -1,10 +1,7 @@
 package com.example.finalproject_leedaon.controller;
 
 import com.example.finalproject_leedaon.domain.Response;
-import com.example.finalproject_leedaon.domain.dto.PostCreateRequest;
-import com.example.finalproject_leedaon.domain.dto.PostCreateResponse;
-import com.example.finalproject_leedaon.domain.dto.PostDto;
-import com.example.finalproject_leedaon.domain.dto.PostReadResponse;
+import com.example.finalproject_leedaon.domain.dto.*;
 import com.example.finalproject_leedaon.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,5 +38,12 @@ public class PostController {
     @GetMapping("/{postId}")
     public Response<PostReadResponse> postDetail(@PathVariable Integer postId) {
         return Response.success(postService.postDetail(postId));
+    }
+
+    // 포스트 수정
+    @PutMapping("/{postId}")
+    public Response<PostUpdateResponse> postUpdate(@PathVariable Integer postId, @RequestBody PostUpdateRequest postUpdateRequest, Authentication authentication) {
+        Integer updatedDto = postService.postUpdate(postId, postUpdateRequest, authentication);
+        return Response.success(new PostUpdateResponse("포스트가 수정되었습니다.", updatedDto));
     }
 }

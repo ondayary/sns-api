@@ -86,12 +86,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
 
-        // 이 코드로 인해서 postController 접근자체가 불가했었다. (기록 위해 남겨두기)
-        /*
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("", null, List.of(new SimpleGrantedAuthority("USER")));
+        /*// 권한 부여하기 - 토근에서 추출한 userName을 넣어줘야 한다.
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userName, null, List.of(new SimpleGrantedAuthority("USER")));
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        filterChain.doFilter(request, response);
-        */
+        filterChain.doFilter(request, response);*/
     }
 }

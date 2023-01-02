@@ -2,17 +2,21 @@ package com.example.finalproject_leedaon.service;
 
 import com.example.finalproject_leedaon.domain.dto.PostDto;
 import com.example.finalproject_leedaon.domain.dto.PostReadResponse;
+import com.example.finalproject_leedaon.domain.dto.PostUpdateRequest;
 import com.example.finalproject_leedaon.domain.entity.Post;
 import com.example.finalproject_leedaon.domain.entity.User;
 import com.example.finalproject_leedaon.exception.AppException;
-import com.example.finalproject_leedaon.exception.ErrorCode;
 import com.example.finalproject_leedaon.repository.PostRepository;
 import com.example.finalproject_leedaon.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import static com.example.finalproject_leedaon.exception.ErrorCode.*;
 
 @Slf4j
 @Service
@@ -27,8 +31,8 @@ public class PostService {
         // userName 없는 경우
         // 없으면 USERNAME_NOT_FOUND 발생
         User user = userRepository.findByUserName(name)
-                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND,
-                                                    ErrorCode.USERNAME_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new AppException(USERNAME_NOT_FOUND,
+                                                    USERNAME_NOT_FOUND.getMessage()));
 
         log.info("user:"+name);
         log.info("user:"+user.toString());
@@ -50,13 +54,28 @@ public class PostService {
 
     // 포스트 리스트
     public Page<PostReadResponse> postList(Pageable pageable) {
-        return postRepository.findAll(pageable).map(PostReadResponse::toPostReadResponse);
+        return postRepository.findAll(pageable).map(PostReadResponse::toPostReadResponse); // PostReadResponse에 있는 toPostReeadResponse를 바로 가져다 쓰겠다.
     }
 
     // 포스트 상세
     public PostReadResponse postDetail(Integer postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND, ErrorCode.POST_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new AppException(POST_NOT_FOUND, POST_NOT_FOUND.getMessage()));
         return PostReadResponse.toPostReadResponse(post);
+    }
+
+    // 포스트 수정
+    @Transactional
+    public Integer postUpdate(Integer postId, PostUpdateRequest postUpdateRequest, Authentication authentication) {
+        User user = userRepository.findByUserName(authentication.getName())
+                .orElseThrow(() -> new AppException(USERNAME_NOT_FOUND, USERNAME_NOT_FOUND.getMessage()));
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new AppException(POST_NOT_FOUND, POST_NOT_FOUND.getMessage()));
+
+        if(!post.getUser().equals(user)) throw new AppException(INVALID_PERMISSION, INVALID_PERMISSION.getMessage());
+
+        post.update(postUpdateRequest.toPost(user));
+        return post.getId();
     }
 }
