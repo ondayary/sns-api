@@ -78,4 +78,10 @@ public class PostService {
         post.update(postUpdateRequest.toPost(user));
         return post.getId();
     }
+
+    // 포스트 삭제
+    public Integer postDelete(Integer postId) {
+        postRepository.deleteById(postId);
+        return postId;
+    }
 }

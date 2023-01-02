@@ -46,4 +46,11 @@ public class PostController {
         Integer updatedDto = postService.postUpdate(postId, postUpdateRequest, authentication);
         return Response.success(new PostUpdateResponse("포스트가 수정되었습니다.", updatedDto));
     }
+
+    // 포스트 삭제
+    @DeleteMapping("/{postId}")
+    public Response<PostDeleteResponse> postDelete(@PathVariable Integer postId) {
+        Integer deletedDto = postService.postDelete(postId);
+        return Response.success(new PostDeleteResponse("포스트가 삭제되었습니다.", deletedDto));
+    }
 }
