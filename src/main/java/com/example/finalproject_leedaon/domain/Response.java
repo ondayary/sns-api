@@ -6,6 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class Response<T> { // 성공한 결과, 실패한 결과 둘다 담길 수 있다.
+                           // 컨트롤러에서 최종으로 리턴해주는 리스폰스
 
     private String resultCode; // 결과에 따른 메세지
     private T result; // 성공인지 실패인지의 결과
