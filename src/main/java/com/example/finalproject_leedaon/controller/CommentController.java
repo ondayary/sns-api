@@ -4,6 +4,7 @@ import com.example.finalproject_leedaon.domain.Response;
 import com.example.finalproject_leedaon.domain.dto.comment.CommentCreateRequest;
 import com.example.finalproject_leedaon.domain.dto.comment.CommentDto;
 import com.example.finalproject_leedaon.domain.dto.comment.CommentResponse;
+import com.example.finalproject_leedaon.domain.dto.comment.CommentUpdateRequest;
 import com.example.finalproject_leedaon.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,12 +37,24 @@ public class CommentController {
         return Response.success(commentDto.toResponse());
     }
 
-    /** 댓글 조회
+    /**
+     * 댓글 조회
      * GET /posts/{postId}/comments[?page=0]
      */
     @GetMapping("/{postId}/comments")
     public Response<Page<CommentResponse>> commentList(@PathVariable Integer postId, @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<CommentResponse> commentResponsePage = commentService.commentList(postId, pageable);
         return Response.success(commentResponsePage);
+    }
+
+    /**
+     * 댓글 수정
+     * PUT /posts/{postId}/comments/{id}
+     * 수정시에도 authentication 필요
+     */
+    @PutMapping("/{postId}/comments/{id}")
+    public Response<CommentResponse> commentUpdate(@PathVariable Integer postId, @PathVariable Integer id, @RequestBody CommentUpdateRequest commentUpdateRequest, Authentication authentication) {
+        CommentDto commentDto = commentService.commentUpdate(postId, id, commentUpdateRequest, authentication.getName());
+        return Response.success(commentDto.toResponse());
     }
 }

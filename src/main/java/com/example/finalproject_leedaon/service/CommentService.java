@@ -3,6 +3,7 @@ package com.example.finalproject_leedaon.service;
 import com.example.finalproject_leedaon.domain.dto.comment.CommentCreateRequest;
 import com.example.finalproject_leedaon.domain.dto.comment.CommentDto;
 import com.example.finalproject_leedaon.domain.dto.comment.CommentResponse;
+import com.example.finalproject_leedaon.domain.dto.comment.CommentUpdateRequest;
 import com.example.finalproject_leedaon.domain.entity.Comment;
 import com.example.finalproject_leedaon.domain.entity.Post;
 import com.example.finalproject_leedaon.domain.entity.User;
@@ -16,8 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import static com.example.finalproject_leedaon.exception.ErrorCode.POST_NOT_FOUND;
-import static com.example.finalproject_leedaon.exception.ErrorCode.USERNAME_NOT_FOUND;
+import static com.example.finalproject_leedaon.exception.ErrorCode.*;
 
 @Service
 @Slf4j
@@ -57,5 +57,26 @@ public class CommentService {
                 .map(comment -> comment.toCommentDto().toResponse());
 
         return commentResponsePage;
+    }
+
+    // 댓글 수정
+    public CommentDto commentUpdate(Integer postId, Integer id, CommentUpdateRequest commentUpdateRequest, String userName) {
+
+        // post가 없는 경우
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new AppException(POST_NOT_FOUND, POST_NOT_FOUND.getMessage()));
+
+        // Comment가 없는 경우
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new AppException(COMMENT_NOT_FOUND, COMMENT_NOT_FOUND.getMessage()));
+
+        // 작성자가 일치하지 않는 경우
+        if(!comment.getUser().getUserName().equals(userName)) {
+            throw new AppException(INVALID_PERMISSION, INVALID_PERMISSION.getMessage());
+        }
+
+        comment.update(comment.getComment());
+        Comment updatedComment = commentRepository.save(comment);
+        return updatedComment.toCommentDto();
     }
 }

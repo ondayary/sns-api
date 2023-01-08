@@ -40,4 +40,9 @@ public class Comment extends PostBase { // 댓글 기능
                 .createdAt(this.getCreatedAt())
                 .build();
     }
+
+    // 댓글 수정
+    public void update(String comment) {
+        this.comment = comment;
+    }
 }
