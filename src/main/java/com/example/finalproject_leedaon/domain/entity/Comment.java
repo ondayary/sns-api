@@ -1,12 +1,12 @@
 package com.example.finalproject_leedaon.domain.entity;
 
+import com.example.finalproject_leedaon.domain.dto.comment.CommentDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Builder
@@ -29,19 +29,15 @@ public class Comment extends PostBase { // 댓글 기능
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String Comment;
+    private String comment;
 
-    public Comment(Integer id, String comment, String userName, Integer id1, LocalDateTime createdAt) {
-        super();
-    }
-
-    public Comment toEntity(Comment comment) {
-        return new Comment(
-                comment.getId(),
-                comment.getComment(),
-                comment.getUser().getUserName(),
-                comment.getPost().getId(),
-                comment.getCreatedAt()
-        );
+    public CommentDto toCommentDto() {
+        return CommentDto.builder()
+                .id(this.id)
+                .comment(this.comment)
+                .post(this.post)
+                .user(this.user)
+                .createdAt(this.getCreatedAt())
+                .build();
     }
 }

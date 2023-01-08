@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/swagger-ui/").permitAll()
                 .antMatchers("/api/v1/users/join", "/api/v1/users/login").permitAll() // join, login은 언제나 가능
-                .antMatchers(HttpMethod.POST, "/api/v1/posts").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/v1/posts", "/api/v1/posts/{id}/comments").authenticated()
                 .antMatchers(HttpMethod.PUT, "/api/v1/posts").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/api/v1/posts").authenticated()
                 .and()
