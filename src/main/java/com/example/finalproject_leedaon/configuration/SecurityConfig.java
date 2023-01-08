@@ -31,9 +31,15 @@ public class SecurityConfig {
                 .cors().and() // 도메인이 다를 때 허용하겠다.
                 .authorizeRequests()
                 .antMatchers("/swagger-ui/").permitAll()
-                .antMatchers("/api/v1/users/join", "/api/v1/users/login").permitAll() // join, login은 언제나 가능
-                .antMatchers(HttpMethod.POST, "/api/v1/posts", "/api/v1/posts/{id}/comments").authenticated()
+                // 회원가입, 로그인
+                .antMatchers("/api/v1/users/join", "/api/v1/users/login").permitAll()
+                // post 등록, comment 작성
+                .antMatchers(HttpMethod.POST, "/api/v1/posts", "/api/v1/posts/{postId}/comments").authenticated()
+                // post 상세조회, comment 조회
+                .antMatchers(HttpMethod.GET, "/api/v1/posts/*","/api/v1/posts/{postId}/comments").permitAll()
+                // post 수정
                 .antMatchers(HttpMethod.PUT, "/api/v1/posts").authenticated()
+                // post 삭제
                 .antMatchers(HttpMethod.DELETE, "/api/v1/posts").authenticated()
                 .and()
                 .sessionManagement() // 인증, 인가 관리
