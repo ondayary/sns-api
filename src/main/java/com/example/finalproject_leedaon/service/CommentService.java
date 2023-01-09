@@ -37,7 +37,7 @@ public class CommentService {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new AppException(POST_NOT_FOUND, POST_NOT_FOUND.getMessage()));
 
-        Comment comment = commentRepository.save(CommentCreateRequest.toCommentEntity(user, post));
+        Comment comment = commentRepository.save(commentCreateRequest.toEntity(user, post));
 
         return comment.toCommentDto();
     }

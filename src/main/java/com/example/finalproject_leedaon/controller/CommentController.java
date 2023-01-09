@@ -25,7 +25,7 @@ public class CommentController {
      * POST /posts/{postsId}/comments
      */
     @PostMapping("/{postId}/comments")
-    public Response<CommentResponse> commentCreate(@PathVariable Integer postId, Authentication authentication, CommentCreateRequest commentCreateRequest) {
+    public Response<CommentResponse> commentCreate(@PathVariable Integer postId, Authentication authentication, @RequestBody CommentCreateRequest commentCreateRequest) {
         CommentDto commentDto = commentService.commentCreate(postId, authentication.getName(), commentCreateRequest);
 
         // comment가 어떤 내용으로 담기는지 찍어보기
@@ -52,6 +52,10 @@ public class CommentController {
     @PutMapping("/{postId}/comments/{id}")
     public Response<CommentResponse> commentUpdate(@PathVariable Integer postId, @PathVariable Integer id, @RequestBody CommentUpdateRequest commentUpdateRequest, Authentication authentication) {
         CommentDto commentDto = commentService.commentUpdate(postId, id, commentUpdateRequest, authentication.getName());
+
+        // comment가 어떤 내용으로 수정되는지 찍어보기
+        log.info("modify comment:{}", commentDto.getComment());
+
         return Response.success(commentDto.toResponse());
     }
 
