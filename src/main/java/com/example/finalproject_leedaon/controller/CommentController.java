@@ -1,10 +1,7 @@
 package com.example.finalproject_leedaon.controller;
 
 import com.example.finalproject_leedaon.domain.Response;
-import com.example.finalproject_leedaon.domain.dto.comment.CommentCreateRequest;
-import com.example.finalproject_leedaon.domain.dto.comment.CommentDto;
-import com.example.finalproject_leedaon.domain.dto.comment.CommentResponse;
-import com.example.finalproject_leedaon.domain.dto.comment.CommentUpdateRequest;
+import com.example.finalproject_leedaon.domain.dto.comment.*;
 import com.example.finalproject_leedaon.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,5 +53,15 @@ public class CommentController {
     public Response<CommentResponse> commentUpdate(@PathVariable Integer postId, @PathVariable Integer id, @RequestBody CommentUpdateRequest commentUpdateRequest, Authentication authentication) {
         CommentDto commentDto = commentService.commentUpdate(postId, id, commentUpdateRequest, authentication.getName());
         return Response.success(commentDto.toResponse());
+    }
+
+    /** 댓글 삭제
+     * DELETE /posts/{postsId}/comments/{id}
+     * 삭제시에도 authentication 필요
+     */
+    @DeleteMapping("/{postsId}/comments/{id}")
+    public Response<CommentDeleteResponse> commentDelete(@PathVariable Integer postId, @PathVariable Integer id, Authentication authentication) {
+        Integer commentDelete  = commentService.commentDelete(postId, id, authentication.getName());
+        return Response.success(new CommentDeleteResponse("댓글 삭제 완료", commentDelete));
     }
 }
