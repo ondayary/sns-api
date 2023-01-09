@@ -53,4 +53,19 @@ public class PostController {
         Integer deletedDto = postService.postDelete(postId);
         return Response.success(new PostDeleteResponse("포스트가 삭제되었습니다.", deletedDto));
     }
+
+    /** 마이피드 조회
+     * GET /posts/my
+     * - 내가 작성한 글만 보이는 기능
+     * - 제목, 글쓴이, 내용, 작성날짜가 표시된다.
+     * - 목록 기능은 페이징 기능이 포함된다. (Pageable 사용)
+     *     - 한 페이지당 default 피드 갯수는 20개이다.
+     *     - 총 페이지 갯수가 표시된다.
+     *     - 작성날짜 기준으로 최신순으로 sort한다.
+     */
+    @GetMapping("/my")
+    public Response<Page<PostReadResponse>> postMyFeed(@PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable, Authentication authentication) {
+        Page<PostReadResponse> postMyFeed = postService.postMyFeed(pageable, authentication.getName());
+        return Response.success(postMyFeed);
+    }
 }

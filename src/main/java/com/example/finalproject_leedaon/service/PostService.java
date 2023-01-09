@@ -1,6 +1,7 @@
 package com.example.finalproject_leedaon.service;
 
 import com.example.finalproject_leedaon.domain.dto.post.PostDto;
+import com.example.finalproject_leedaon.domain.dto.post.PostReadResponse;
 import com.example.finalproject_leedaon.domain.dto.post.PostUpdateRequest;
 import com.example.finalproject_leedaon.domain.entity.Post;
 import com.example.finalproject_leedaon.domain.entity.User;
@@ -52,15 +53,15 @@ public class PostService {
     }
 
     // 포스트 리스트
-    public Page<PostDto.PostReadResponse> postList(Pageable pageable) {
-        return postRepository.findAll(pageable).map(PostDto.PostReadResponse::toPostReadResponse); // PostReadResponse에 있는 toPostReeadResponse를 바로 가져다 쓰겠다.
+    public Page<PostReadResponse> postList(Pageable pageable) {
+        return postRepository.findAll(pageable).map(PostReadResponse::toPostReadResponse); // PostReadResponse에 있는 toPostReeadResponse를 바로 가져다 쓰겠다.
     }
 
     // 포스트 상세
-    public PostDto.PostReadResponse postDetail(Integer postId) {
+    public PostReadResponse postDetail(Integer postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new AppException(POST_NOT_FOUND, POST_NOT_FOUND.getMessage()));
-        return PostDto.PostReadResponse.toPostReadResponse(post);
+        return PostReadResponse.toPostReadResponse(post);
     }
 
     // 포스트 수정
@@ -82,5 +83,18 @@ public class PostService {
     public Integer postDelete(Integer postId) {
         postRepository.deleteById(postId);
         return postId;
+    }
+
+    // 마이피드 조회
+    public Page<PostReadResponse> postMyFeed(Pageable pageable, String userName) {
+
+        // user가 없는 경우
+        User user = userRepository.findByUserName(userName)
+                .orElseThrow(() -> new AppException(USERNAME_NOT_FOUND, USERNAME_NOT_FOUND.getMessage()));
+
+        // 로그인된 유저만의 피드목록 보는 경우
+        Page<Post> postMyFeed = postRepository.findByUser(user, pageable);
+
+        return postMyFeed.map(post -> post.toPostDto().toReadResponse());
     }
 }
