@@ -27,7 +27,7 @@ public class Post extends PostBase {
     private User user;
 
     public PostDto toPostDto() {
-        return new PostDto(this.id, this.title, this.body);
+        return new PostDto(this.id, this.title, this.body, this.user.getUserName(), this.getCreatedAt(), this.getLastModifiedAt());
     }
 
     // 포스트 수정

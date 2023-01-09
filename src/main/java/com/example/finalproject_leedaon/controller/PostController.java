@@ -29,14 +29,14 @@ public class PostController {
 
     // 포스트 리스트
     @GetMapping
-    public Response<Page<PostDto.PostReadResponse>> postList(@PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<PostDto.PostReadResponse> postList = postService.postList(pageable);
+    public Response<Page<PostReadResponse>> postList(@PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<PostReadResponse> postList = postService.postList(pageable);
         return Response.success(postList);
     }
 
     // 포스트 상세
     @GetMapping("/{postId}")
-    public Response<PostDto.PostReadResponse> postDetail(@PathVariable Integer postId) {
+    public Response<PostReadResponse> postDetail(@PathVariable Integer postId) {
         return Response.success(postService.postDetail(postId));
     }
 
