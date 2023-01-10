@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/posts")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class CommentController {
 
@@ -24,7 +24,7 @@ public class CommentController {
      * 댓글작성
      * POST /posts/{postsId}/comments
      */
-    @PostMapping("/{postId}/comments")
+    @PostMapping("/posts/{postId}/comments")
     public Response<CommentResponse> commentCreate(@PathVariable Integer postId, Authentication authentication, @RequestBody CommentCreateRequest commentCreateRequest) {
         CommentDto commentDto = commentService.commentCreate(postId, authentication.getName(), commentCreateRequest);
 
@@ -38,7 +38,7 @@ public class CommentController {
      * 댓글 조회
      * GET /posts/{postId}/comments[?page=0]
      */
-    @GetMapping("/{postId}/comments")
+    @GetMapping("/posts/{postId}/comments")
     public Response<Page<CommentResponse>> commentList(@PathVariable Integer postId, @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<CommentResponse> commentResponsePage = commentService.commentList(postId, pageable);
         return Response.success(commentResponsePage);
@@ -49,13 +49,9 @@ public class CommentController {
      * PUT /posts/{postId}/comments/{id}
      * 수정시에도 authentication 필요
      */
-    @PutMapping("/{postId}/comments/{id}")
+    @PutMapping("/posts/{postId}/comments/{id}")
     public Response<CommentResponse> commentUpdate(@PathVariable Integer postId, @PathVariable Integer id, @RequestBody CommentUpdateRequest commentUpdateRequest, Authentication authentication) {
         CommentDto commentDto = commentService.commentUpdate(postId, id, commentUpdateRequest, authentication.getName());
-
-        // comment가 어떤 내용으로 수정되는지 찍어보기
-        log.info("modify comment:{}", commentDto.getComment());
-
         return Response.success(commentDto.toResponse());
     }
 
@@ -63,7 +59,7 @@ public class CommentController {
      * DELETE /posts/{postsId}/comments/{id}
      * 삭제시에도 authentication 필요
      */
-    @DeleteMapping("/{postsId}/comments/{id}")
+    @DeleteMapping("/posts/{postsId}/comments/{id}")
     public Response<CommentDeleteResponse> commentDelete(@PathVariable Integer postId, @PathVariable Integer id, Authentication authentication) {
         Integer commentDelete  = commentService.commentDelete(postId, id, authentication.getName());
         return Response.success(new CommentDeleteResponse("댓글 삭제 완료", commentDelete));
