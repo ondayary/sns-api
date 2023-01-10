@@ -30,4 +30,12 @@ public class Good extends PostBase { // 좋아요 기능
     private User user;
 
     private LocalDateTime deletedAt;
+
+    // GoodService - goodPush() - 좋아요가 존재하지 않는 경우
+    public static Good goodPush(User user, Post post) {
+        return Good.builder()
+                .user(user)
+                .post(post)
+                .build();
+    }
 }
