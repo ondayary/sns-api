@@ -3,14 +3,9 @@ package com.example.finalproject_leedaon.controller;
 import com.example.finalproject_leedaon.domain.Response;
 import com.example.finalproject_leedaon.service.GoodService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
@@ -30,5 +25,14 @@ public class GoodController {
             return Response.success("좋아요를 눌렀습니다.");
         }
         return null;
+    }
+
+    /** 좋아요 개수
+     * GET /posts/{postsId}/likes
+     */
+    @GetMapping("/posts/{postsId}/likes")
+    public Response<Integer> goodCount(@PathVariable Integer postId) {
+        Integer goodCount = goodService.goodCount(postId);
+        return Response.success(goodCount);
     }
 }

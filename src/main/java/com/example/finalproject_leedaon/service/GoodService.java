@@ -48,4 +48,15 @@ public class GoodService {
             return 1;
         }
     }
+
+    // 좋아요 개수
+    public Integer goodCount(Integer postId) {
+
+        // post가 없는 경우
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new AppException(POST_NOT_FOUND, POST_NOT_FOUND.getMessage()));
+
+//        Integer goodCount = goodRepository.countByPost(post);
+        return goodRepository.countByPost(post);
+    }
 }
