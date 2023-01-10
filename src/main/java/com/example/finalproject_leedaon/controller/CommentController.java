@@ -59,7 +59,7 @@ public class CommentController {
      * DELETE /posts/{postsId}/comments/{id}
      * 삭제시에도 authentication 필요
      */
-    @DeleteMapping("/posts/{postsId}/comments/{id}")
+    @DeleteMapping("/posts/{postId}/comments/{id}")
     public Response<CommentDeleteResponse> commentDelete(@PathVariable Integer postId, @PathVariable Integer id, Authentication authentication) {
         Integer commentDelete  = commentService.commentDelete(postId, id, authentication.getName());
         return Response.success(new CommentDeleteResponse("댓글 삭제 완료", commentDelete));

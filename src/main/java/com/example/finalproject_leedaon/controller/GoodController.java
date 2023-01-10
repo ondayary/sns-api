@@ -30,7 +30,7 @@ public class GoodController {
     /** 좋아요 개수
      * GET /posts/{postsId}/likes
      */
-    @GetMapping("/posts/{postsId}/likes")
+    @GetMapping("/posts/{postId}/likes")
     public Response<Integer> goodCount(@PathVariable Integer postId) {
         Integer goodCount = goodService.goodCount(postId);
         return Response.success(goodCount);

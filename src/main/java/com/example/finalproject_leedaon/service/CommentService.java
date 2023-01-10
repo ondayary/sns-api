@@ -72,7 +72,7 @@ public class CommentService {
             throw new AppException(INVALID_PERMISSION, INVALID_PERMISSION.getMessage());
         }
 
-        comment.update(comment.getComment());
+        comment.update(commentUpdateRequest.getComment());
         Comment updatedComment = commentRepository.save(comment);
         return updatedComment.toCommentDto();
     }
@@ -94,7 +94,6 @@ public class CommentService {
         }
 
         commentRepository.delete(comment);
-        commentRepository.deleteById(id);
         return id;
     }
 }
