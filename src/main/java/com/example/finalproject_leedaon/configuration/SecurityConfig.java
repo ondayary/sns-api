@@ -20,7 +20,7 @@ public class SecurityConfig {
 
     private final UserService userService;
 
-    @Value("${jwt.token.secret}")
+    @Value("${jwt.secret}")
     private String secretKey;
 
     @Bean
@@ -33,14 +33,10 @@ public class SecurityConfig {
                 .antMatchers("/swagger-ui/").permitAll()
                 // 회원가입, 로그인
                 .antMatchers("/api/v1/users/join", "/api/v1/users/login").permitAll()
-                // post 등록, comment 작성
-                .antMatchers(HttpMethod.POST, "/api/v1/posts", "/api/v1/posts/{postId}/comments").authenticated()
-                // post 상세조회, comment 조회
-                .antMatchers(HttpMethod.GET, "/api/v1/posts/*","/api/v1/posts/{postId}/comments").permitAll()
-                // post 수정
-                .antMatchers(HttpMethod.PUT, "/api/v1/posts").authenticated()
-                // post 삭제
-                .antMatchers(HttpMethod.DELETE, "/api/v1/posts").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/v1/posts/**").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/v1/posts/**").authenticated()
+                .antMatchers(HttpMethod.PUT, "/api/v1/posts/**").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/api/v1/posts/**").authenticated()
                 .and()
                 .sessionManagement() // 인증, 인가 관리
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt사용하는 경우 씀, 상태없음 정책

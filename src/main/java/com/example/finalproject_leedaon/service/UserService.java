@@ -21,7 +21,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
 
-    @Value("${jwt.token.secret}")
+    @Value("${jwt.secret}")
     private String secretKey;
     private long expiredTimeMs = 1000 * 60 * 60; // 1시간 유지
 
