@@ -25,12 +25,8 @@ public class GoodController {
     @PostMapping("/posts/{postId}/likes")
     @ApiOperation(value = "좋아요 누르기", notes = "특정 게시물에 좋아요를 누릅니다. 한번 더 호출시 좋아요가 취소됩니다.")
     public Response<String> goodPush(@ApiParam("게시물 번호") @PathVariable Integer postId, @ApiIgnore Authentication authentication) {
-        Integer goodPush = goodService.goodPush(postId, authentication.getName());
-
-        if(goodPush != 0) { // 좋아요를 눌렀으면
-            return Response.success("좋아요를 눌렀습니다.");
-        }
-        return null;
+        goodService.goodPush(postId, authentication.getName());
+        return Response.success("좋아요를 눌렀습니다.");
     }
 
     /** 좋아요 개수

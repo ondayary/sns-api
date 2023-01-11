@@ -1,10 +1,13 @@
 package com.example.finalproject_leedaon.service;
 
+import com.example.finalproject_leedaon.domain.dto.alarm.AlarmType;
 import com.example.finalproject_leedaon.domain.dto.comment.*;
+import com.example.finalproject_leedaon.domain.entity.Alarm;
 import com.example.finalproject_leedaon.domain.entity.Comment;
 import com.example.finalproject_leedaon.domain.entity.Post;
 import com.example.finalproject_leedaon.domain.entity.User;
 import com.example.finalproject_leedaon.exception.AppException;
+import com.example.finalproject_leedaon.repository.AlarmRepository;
 import com.example.finalproject_leedaon.repository.CommentRepository;
 import com.example.finalproject_leedaon.repository.PostRepository;
 import com.example.finalproject_leedaon.repository.UserRepository;
@@ -25,6 +28,7 @@ public class CommentService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final AlarmRepository alarmRepository;
 
     // 댓글 작성
     public CommentDto commentCreate(Integer id, String userName, CommentCreateRequest commentCreateRequest) {
@@ -38,6 +42,10 @@ public class CommentService {
                 .orElseThrow(() -> new AppException(POST_NOT_FOUND, POST_NOT_FOUND.getMessage()));
 
         Comment comment = commentRepository.save(commentCreateRequest.toEntity(user, post));
+
+        // 알람 보내기
+        // of(AlarmType alarmType, User user, Integer fromUserId, Integer targetId)
+        alarmRepository.save(Alarm.of(AlarmType.NEW_COMMENT_ON_POST, post.getUser(), user.getId(), post.getId()));
 
         return comment.toCommentDto();
     }
